@@ -203,7 +203,7 @@ endif
 	sleep 15
 	epinio service bind $(EPINIO_APP)_redis $(EPINIO_APP)
 	sleep 15
-	epinio app restart $(EPINIO_APP)
+	epinio app update $(EPINIO_APP) --instances 1
 
 epinio_undeploy: epinio_target
 ifndef EPINIO_APP
