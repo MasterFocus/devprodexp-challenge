@@ -31,4 +31,25 @@ while : ; do
 	[ $SECONDS -gt 60 ] && echo 'Aborting after 60s waiting for IP' && exit 1
 done
 echo "@> Detected IP Address: $INGRESS_IP_ADDR"
+# The cluster is still fresh, so trying the next installation steps can yield this error:
+# "[...] couldn't get resource list for metrics.k8s.io/v1beta1: the server is currently unable to handle the request"
+# To keep this error out of the console, I can simply wait a bit more.
+echo "@> Sleeping 45 more seconds..."
+sleep 45
+echo
 
+echo
+echo "@> Installing cert-manager via Helm"
+echo
+
+helm repo update
+
+kubectl create namespace cert-manager
+helm repo add jetstack https://charts.jetstack.io
+helm install cert-manager --namespace cert-manager jetstack/cert-manager \
+	--set installCRDs=true \
+	--set extraArgs={--enable-certificate-owner-ref=true}
+
+echo
+echo '@> -~=* DONE *=~- <@'
+echo
