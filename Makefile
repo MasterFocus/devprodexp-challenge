@@ -184,3 +184,9 @@ endif
 epinio_cs_all: epinio_cs_postgres epinio_cs_rabbitmq epinio_cs_redis
 
 epinio_ds_all: epinio_ds_postgres epinio_ds_rabbitmq epinio_ds_redis
+
+epinio_purge:
+ifndef EPINIO_NS
+	$(error EPINIO_NS is undefined)
+endif
+	epinio namespace delete $(EPINIO_NS)
