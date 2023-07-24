@@ -180,3 +180,7 @@ ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service delete $(EPINIO_APP)_redis --unbind
+
+epinio_cs_all: epinio_cs_postgres epinio_cs_rabbitmq epinio_cs_redis
+
+epinio_ds_all: epinio_ds_postgres epinio_ds_rabbitmq epinio_ds_redis
