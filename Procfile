@@ -1,1 +1,1 @@
-web: echo hello world
+web: ./epinio_run.sh gateway.service products.service orders.service
