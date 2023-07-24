@@ -85,9 +85,9 @@ $ ./formURI.sh \
 amqp://username:jHHRenxN1zrGej8r@x24be110700311b94ca12763b7e33-rabbitmq.myns.svc.cluster.local:5672
 ```
 
-Some additional changes were made and `Makefile` in particular got quite ugly. Perhaps this automation can be achieved within Epinio somehow (using certain commands and/or modifying Helm charts), but I couldn't find any proper documentation about this use case.
+Some additional changes were made for testing. Commands in `Makefile` specially got quite messy and unsecure. I'm not proud of it, but I take it as part of the learning process. Perhaps a better automation can be achieved within Epinio somehow (using certain commands and/or modifying Helm charts), but I couldn't find any proper documentation. This naive approach shall be revised when I have more time and Epinio releases new versions.
 
-Nevertheless, it was a step in the right direction. The application within Epinio doesn't crash and `epinio app logs` now shows a sensible error:
+Nevertheless, the application within Epinio doesn't crash anymore and `epinio app logs` shows a sensible error:
 ```
 rmyapp-94e7d341f71ff6f43253f1c5e813057b22f91cda amqp.exceptions.AccessRefused:
 	(0, 0): (403) ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN.
