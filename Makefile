@@ -185,6 +185,23 @@ epinio_cs_all: epinio_cs_postgres epinio_cs_rabbitmq epinio_cs_redis
 
 epinio_ds_all: epinio_ds_postgres epinio_ds_rabbitmq epinio_ds_redis
 
+epinio_deploy: epinio_target epinio_cs_all
+	epinio app delete $(EPINIO_APP) || echo "App didn't exist - nothing to delete. Proceeding..."
+	cat environment_dev.yml | grep -v '#dev' > environment.yml
+	epinio push --name $(EPINIO_APP)
+	rm -f environment.yml
+	epinio service bind $(EPINIO_APP)_postgresql $(EPINIO_APP)
+	epinio service bind $(EPINIO_APP)_rabbitmq $(EPINIO_APP)
+	epinio service bind $(EPINIO_APP)_redis $(EPINIO_APP)
+	epinio app restart $(EPINIO_APP)
+
+epinio_undeploy: epinio_target
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio app delete $(EPINIO_APP)
+	$(MAKE) epinio_ds_all
+
 epinio_purge:
 ifndef EPINIO_NS
 	$(error EPINIO_NS is undefined)
