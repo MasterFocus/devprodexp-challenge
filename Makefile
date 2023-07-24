@@ -190,6 +190,12 @@ epinio_deploy: epinio_target epinio_cs_all
 	cat environment_dev.yml | grep -v '#dev' > environment.yml
 	epinio push --name $(EPINIO_APP)
 	rm -f environment.yml
+	$(MAKE) epinio_bind
+
+epinio_bind:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
 	epinio service bind $(EPINIO_APP)_postgresql $(EPINIO_APP)
 	epinio service bind $(EPINIO_APP)_rabbitmq $(EPINIO_APP)
 	epinio service bind $(EPINIO_APP)_redis $(EPINIO_APP)
