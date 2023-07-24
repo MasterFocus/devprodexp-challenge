@@ -9,9 +9,8 @@ After some time checking files, reading documentations and installing things, I 
 - I already had [jq 1.6](https://jqlang.github.io/jq/) so I didn't need [brew](https://brew.sh/)
 - I used [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (`conda 23.5.2`)
 - I had to install Microsoft's Python extension in VS Code and use the correct "Python Debug: Connect" option
-- I also installed [Epinio CLI](https://docs.epinio.io/installation/install_epinio_cli)
 
-Next was the execution of the instructions in `README-DevOps.md`.
+Next was the execution of the instructions in `README-DevOps.md`, so I installed [Epinio CLI](https://docs.epinio.io/installation/install_epinio_cli).
 
 I created a [k3d 5.5.1](https://k3d.io/) local cluster and followed [Epinio's instructions](https://docs.epinio.io/howtos/install_epinio_on_k3d). To easily get a fresh installation if I ever needed it, I wrote `recreate_k3d_cluster.sh`. Check the contents of the script and _be careful_: it **WIPES DOCKER COMPLETELY**, recreates the k3d cluster and installs Epinio. For my local environment, this "nuclear" approach was acceptable.
 
