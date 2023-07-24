@@ -149,7 +149,7 @@ epinio_cs_postgres:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
-	epinio service create postgresql-dev $(EPINIO_APP)_postgresql --wait
+	epinio service create postgresql-dev $(EPINIO_APP)_postgresql
 
 epinio_ds_postgres:
 ifndef EPINIO_APP
@@ -161,7 +161,7 @@ epinio_cs_rabbitmq:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
-	epinio service create rabbitmq-dev $(EPINIO_APP)_rabbitmq --wait
+	epinio service create rabbitmq-dev $(EPINIO_APP)_rabbitmq
 
 epinio_ds_rabbitmq:
 ifndef EPINIO_APP
@@ -173,7 +173,7 @@ epinio_cs_redis:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
-	epinio service create redis-dev $(EPINIO_APP)_redis --wait
+	epinio service create redis-dev $(EPINIO_APP)_redis
 
 epinio_ds_redis:
 ifndef EPINIO_APP
@@ -190,6 +190,7 @@ epinio_deploy: epinio_target epinio_cs_all
 	cat environment_dev.yml | grep -v '#dev' > environment.yml
 	epinio push --name $(EPINIO_APP)
 	rm -f environment.yml
+	sleep 20
 	$(MAKE) epinio_bind
 
 epinio_bind:
@@ -197,8 +198,11 @@ ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service bind $(EPINIO_APP)_postgresql $(EPINIO_APP)
+	sleep 15
 	epinio service bind $(EPINIO_APP)_rabbitmq $(EPINIO_APP)
+	sleep 15
 	epinio service bind $(EPINIO_APP)_redis $(EPINIO_APP)
+	sleep 15
 	epinio app restart $(EPINIO_APP)
 
 epinio_undeploy: epinio_target
