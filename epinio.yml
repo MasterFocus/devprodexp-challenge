@@ -1,0 +1,4 @@
+name: myapp
+configuration:
+  environment:
+    APP_ENV: "HelloWorld"

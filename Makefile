@@ -188,7 +188,7 @@ epinio_ds_all: epinio_ds_postgres epinio_ds_rabbitmq epinio_ds_redis
 epinio_deploy: epinio_target epinio_cs_all
 	epinio app delete $(EPINIO_APP) || echo "App didn't exist - nothing to delete. Proceeding..."
 	cat environment_dev.yml | grep -v '#dev' > environment.yml
-	epinio push --name $(EPINIO_APP)
+	epinio push
 	rm -f environment.yml
 	sleep 20
 	$(MAKE) epinio_bind
