@@ -1,11 +1,11 @@
 This is my attempt to modify the code in order to deploy it to Epinio 1.8.1 instead of CloudFoundry:
 - I spent 2 days with this challenge
-- I had never actually used `conda`` before
+- I had never actually used `conda` before
 - I had never heard of `CloudFoundry`, `Epinio`, `nameko` nor `paketo`
 
 Machine used: `Linux 5.15.0-76-generic #83~20.04.1-Ubuntu SMP Wed Jun 21 20:23:31 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`
 
-After some time checking files, reading documentations and instaling things, I was able to execute everything in `README-DevEnv.md`.
+After some time checking files, reading documentations and installing things, I was able to execute everything in `README-DevEnv.md`.
 - I already had [jq 1.6](https://jqlang.github.io/jq/) so I didn't need [brew](https://brew.sh/)
 - I used [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (`conda 23.5.2`)
 - I had to install Microsoft's Python extension in VS Code and use the correct "Python Debug: Connect" option
@@ -89,5 +89,7 @@ Some additional changes were made and `Makefile` in particular got quite ugly. P
 
 Nevertheless, it was a step in the right direction. The application within Epinio doesn't crash and `epinio app logs` now shows a sensible error:
 ```
-rmyapp-94e7d341f71ff6f43253f1c5e813057b22f91cda amqp.exceptions.AccessRefused: (0, 0): (403) ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN. For details see the broker logfile.
+rmyapp-94e7d341f71ff6f43253f1c5e813057b22f91cda amqp.exceptions.AccessRefused:
+	(0, 0): (403) ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN.
+	For details see the broker logfile.
 ```
