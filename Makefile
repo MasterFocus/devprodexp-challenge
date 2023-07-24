@@ -135,3 +135,12 @@ undeployCF: cf_target
 	$(MAKE) cf_ds_postgres
 	$(MAKE) cf_ds_rabbitmq
 	$(MAKE) cf_ds_redis
+
+# epinio
+
+epinio_target:
+ifndef EPINIO_NS
+	$(error EPINIO_NS is undefined)
+endif
+	epinio namespace show $(EPINIO_NS) || epinio namespace create $(EPINIO_NS)
+	epinio target $(EPINIO_NS)
