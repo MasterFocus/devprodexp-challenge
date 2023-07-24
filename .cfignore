@@ -1,0 +1,13 @@
+dev_run*.sh
+environment_dev.yml
+*.egg-info
+.cache
+*.pyc
+htmlcov
+.coverage
+*/wheelhouse
+*.sql
+**/*.log
+stats.xml
+k8s/**
+devops/**

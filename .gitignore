@@ -1,0 +1,11 @@
+*.egg-info
+.cache
+*.pyc
+**/__pycache__
+htmlcov
+.coverage
+*/wheelhouse
+*.sql
+.DS_Store
+**/*.log
+stats.xml
