@@ -71,7 +71,7 @@ After some testing, I decided to [install `yq`](https://github.com/mikefarah/yq/
 ```
 # Assuming namespace "myns", app "myapp" and service "myapp_rabbitmq".
 # Parameter 3 matches the end of the configuration name (avoids reading from "rabbitmq-config").
-# Parameter 4 matches the end of the desired route (avoids reading from "rabbitmq-headless" and/or a wrong-port).
+# Parameter 4 matches the end of the desired route (avoids reading from "rabbitmq-headless" and/or a wrong port).
 # Parameter 5 is the template URI (should include "%PASS%" and "%HOST%").
 
 $ ./formURI.sh \
