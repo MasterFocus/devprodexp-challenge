@@ -51,5 +51,26 @@ helm install cert-manager --namespace cert-manager jetstack/cert-manager \
 	--set extraArgs={--enable-certificate-owner-ref=true}
 
 echo
+echo "@> Installing epinio via Helm with config:"
+echo "@>	--set global.domain=$INGRESS_IP_ADDR.sslip.io"
+echo "@>	--set global.dex.enabled=false" # I won't need https://docs.epinio.io/references/authentication_oidc
+echo
+
+helm repo add epinio https://epinio.github.io/helm-charts
+helm install epinio -n epinio --create-namespace epinio/epinio \
+	--set global.domain=$INGRESS_IP_ADDR.sslip.io \
+	--set global.dex.enabled=false
+echo
+echo "@> Reminder: no auth was configured, see: https://docs.epinio.io/references/authorization"
+
+echo "@> WARNING: Logging in with default ADMIN credentials !!!"
+echo
+sleep 10
+epinio login https://epinio.$INGRESS_IP_ADDR.sslip.io --trust-ca -u admin -p password
+sleep 5
+epinio info
+echo
+
+echo
 echo '@> -~=* DONE *=~- <@'
 echo
