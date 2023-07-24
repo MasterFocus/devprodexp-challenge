@@ -144,3 +144,39 @@ ifndef EPINIO_NS
 endif
 	epinio namespace show $(EPINIO_NS) || epinio namespace create $(EPINIO_NS)
 	epinio target $(EPINIO_NS)
+
+epinio_cs_postgres:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio service create postgresql-dev $(EPINIO_APP)_postgresql --wait
+
+epinio_ds_postgres:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio service delete $(EPINIO_APP)_postgresql --unbind
+
+epinio_cs_rabbitmq:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio service create rabbitmq-dev $(EPINIO_APP)_rabbitmq --wait
+
+epinio_ds_rabbitmq:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio service delete $(EPINIO_APP)_rabbitmq --unbind
+
+epinio_cs_redis:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio service create redis-dev $(EPINIO_APP)_redis --wait
+
+epinio_ds_redis:
+ifndef EPINIO_APP
+	$(error EPINIO_APP is undefined)
+endif
+	epinio service delete $(EPINIO_APP)_redis --unbind
