@@ -1,28 +1,25 @@
 #!/bin/bash
 
 echo
-echo "THIS WILL COMPLETELY WIPE your default Docker context!"
-echo
 echo "The first steps of this script are:"
 echo "- delete all k3d clusters"
-echo "- WIPE Docker's default context ENTIRELY (including images, volumes... everything!)"
 echo "- delete all kubeconfigs"
 echo
 read -p "Continue? (to proceed, type YES): " answer
 [ "${answer}" != "YES" ] && exit 1
 
 echo
-echo "@> Deleting all k3d clusters, wiping docker and kubeconfigs"
+echo "@> Deleting all k3d clusters, wiping kubeconfigs"
 echo
 
 k3d cluster delete --all
 sleep 2
 
-docker context use default
-docker stop $(docker ps -a -q) 2>/dev/null || :
-docker rmi $(docker images -a -q) 2>/dev/null || :
-docker system prune -af || :
-docker volume prune -f || :
+#docker context use default
+#docker stop $(docker ps -a -q) 2>/dev/null || :
+#docker rmi $(docker images -a -q) 2>/dev/null || :
+#docker system prune -af || :
+#docker volume prune -f || :
 
 rm -rf ~/.kube
 
