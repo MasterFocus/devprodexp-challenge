@@ -12,7 +12,7 @@ After some time checking files, reading documentations and installing things, I 
 
 Next was the execution of the instructions in `README-DevOps.md`, so I installed [Epinio CLI](https://docs.epinio.io/installation/install_epinio_cli).
 
-I created a [k3d 5.5.1](https://k3d.io/) local cluster and followed [Epinio's instructions](https://docs.epinio.io/howtos/install_epinio_on_k3d). To easily get a fresh installation if I ever needed it, I wrote `recreate_k3d_cluster.sh`. Check the contents of the script and _be careful_: it **WIPES DOCKER COMPLETELY**, recreates the k3d cluster and installs Epinio. For my local environment, this "nuclear" approach was acceptable.
+I created a [k3d 5.5.1](https://k3d.io/) local cluster and followed [Epinio's instructions](https://docs.epinio.io/howtos/install_epinio_on_k3d). To easily get a fresh installation if I ever needed it, I wrote `recreate_k3d_cluster.sh`. Check the contents of the script before executing: it **wipes any kubeconfigs**, recreates the k3d cluster and installs Epinio.
 
 The Epinio section in `README-DevOps.md` actually uses the `Makefile` to execute CloudFoundry-related commands.
 
