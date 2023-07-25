@@ -60,9 +60,18 @@ Operators can perform less instrusive tweaks by working with high-level abstract
 
 PROs:
 - As mentioned above, the abstractions and automations result in less error-prone work
+	- Eases the provisioning of ephemeral environments by improving reproducibility
+	- Can aid with the "dev/prod parity" factor by avoiding "configuration drift"
+	- Allows the creation of identical and parallel environments for PRs/testing
+- Comes with OIDC support, allowing integration with cloud native identity services
+- Is backed by a big company (SUSE)
+- Extends upon k8s, which is a battle-tested technology
+- Makes it easier for developers to use other "Services" as dependencies, thanks to Epinio's service catalog
+	- Also helps operators manage these "Services" in a centralized way
+- Has a simple dashboard that simplifies visualizing resources and mapping dependencies
 
 CONs:
-- Epinio is still considered in its infancy and other more mature alternatives exist, such as OpenShift
+- Epinio is still considered in its infancy and other more mature "alternatives" exist, such as OpenShift
 	- As it's not adopted by a large group of users, it lacks community support
 	- There aren't many official instructions and real-life examples online to serve as guidance for beginners
 - Anyone willing to have a more fine-grained control (eg. for debugging) may have to step over Epinio's abstractions
