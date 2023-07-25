@@ -92,3 +92,8 @@ rmyapp-94e7d341f71ff6f43253f1c5e813057b22f91cda amqp.exceptions.AccessRefused:
 	(0, 0): (403) ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN.
 	For details see the broker logfile.
 ```
+
+<hr>
+<hr>
+
+This is the end of my attempt. Unfortunately, after being tasked with this challenge, I only had access to a proper development environment for around 48 hours. Still, also considering I had no previous experience with these tools, I'm satisfied with the progress I made. As soon as I finished everything, Epinio released version 1.9.0, with bug fixes and new features. Hopefully we'll see more individuals and companies adopting it and sharing their experiences online in the near future!
