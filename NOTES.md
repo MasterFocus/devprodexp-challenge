@@ -170,3 +170,11 @@ After some attempts (with wrong variable names and other minor mistakes), I conf
 More importantly, **this also applies to "`epinio push --bind`"**, which means that using "`epinio service bind ServiceA`" and then "`epinio push --bind ConfigB`" will cause **only "`ConfigB`"** to be bound.
 
 As everything was fixed, the test started working again (check the `full-test.sh` file).
+
+<hr>
+
+This was an interesting challenge! Notably, I didn't explore some aspects outside a development-oriented scope, such as
+- access control (_admin_ VS _regular user_)
+- use of resources outside the cluster (eg. leveraging Epinio and Crossplane, as mentioned [here](https://docs.epinio.io/references/services) and [here](https://www.suse.com/c/rancher_blog/epinio-and-crossplane-the-perfect-kubernetes-fit/))
+
+Hopefully Epinio achieves more adoption in the future, so we can see a bigger community sharing more use cases and success stories.
