@@ -201,7 +201,7 @@ endif
 	epinio service bind $(EPINIO_APP)_postgresql $(EPINIO_APP)
 	sleep 15
 	epinio app manifest $(EPINIO_APP) .tmp-manifest
-	./formURI.sh .tmp-manifest $(EPINIO_APP)_postgresql postgresql 'postgresql.myns.svc.cluster.local:5432' 'postgresql://postgresql:%PASS%@%HOST%/devex' > .tmp-uri
+	./formURI.sh .tmp-manifest $(EPINIO_APP)_postgresql postgresql 'postgresql.myns.svc.cluster.local:5432' 'postgresql://postgres:%PASS%@%HOST%/devex' > .tmp-uri
 	echo -n "epinio app env set $(EPINIO_APP) POSTGRES_URI " > .tmp-script
 	cat .tmp-uri >> .tmp-script
 	bash .tmp-script
@@ -210,7 +210,7 @@ endif
 	epinio service bind $(EPINIO_APP)_rabbitmq $(EPINIO_APP)
 	sleep 15
 	epinio app manifest $(EPINIO_APP) .tmp-manifest
-	./formURI.sh .tmp-manifest $(EPINIO_APP)_rabbitmq rabbitmq 'rabbitmq.myns.svc.cluster.local:5672' 'amqp://guest:%PASS%@%HOST%' > .tmp-uri
+	./formURI.sh .tmp-manifest $(EPINIO_APP)_rabbitmq rabbitmq 'rabbitmq.myns.svc.cluster.local:5672' 'amqp://user:%PASS%@%HOST%' > .tmp-uri
 	echo -n "epinio app env set $(EPINIO_APP) AMQP_URI " > .tmp-script
 	cat .tmp-uri >> .tmp-script
 	bash .tmp-script
