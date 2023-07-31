@@ -1,6 +1,13 @@
 #!/bin/bash
 
-# create dbname for postgres
+TEMPLATE_URI="$(cat /configurations/$POSTGRESQL_CFG/POSTGRES_URI)"
+export POSTGRES_URI="${TEMPLATE_URI/\%PASS\%/$(cat /configurations/$POSTGRESQL_SVC/postgres-password)}"
+
+TEMPLATE_URI="$(cat /configurations/$RABBITMQ_CFG/AMQP_URI)"
+export AMQP_URI="${TEMPLATE_URI/\%PASS\%/$(cat /configurations/$RABBITMQ_SVC/rabbitmq-password)}"
+
+TEMPLATE_URI="$(cat /configurations/$REDIS_CFG/REDIS_URI)"
+export REDIS_URI="${TEMPLATE_URI/\%PASS\%/$(cat /configurations/$REDIS_SVC/redis-password)}"
 
 python -c """
 import psycopg2 as db

@@ -186,47 +186,42 @@ epinio_cs_all: epinio_cs_postgres epinio_cs_rabbitmq epinio_cs_redis
 epinio_ds_all: epinio_ds_postgres epinio_ds_rabbitmq epinio_ds_redis
 
 epinio_deploy: epinio_target epinio_cs_all
+#	Create the "empty" App
 	epinio app delete $(EPINIO_APP) || echo "App didn't exist - nothing to delete. Proceeding..."
+	epinio app create $(EPINIO_APP)
+#	Bind Service and then bind our custom Configuration - POSTGRESQL
+	epinio service bind $(EPINIO_APP)_postgresql $(EPINIO_APP)
+	./formURI.sh $(EPINIO_APP)_postgresql 'postgresql.$(EPINIO_NS).svc.cluster.local:5432' 'postgresql://postgres:%PASS%@%HOST%/devex' > .tmp-uri
+	echo -n "epinio configuration create $(EPINIO_APP)-postgresql-cfg POSTGRES_URI " > .tmp-script
+	cat .tmp-uri >> .tmp-script
+	bash .tmp-script
+	epinio configuration bind $(EPINIO_APP)-postgresql-cfg $(EPINIO_APP)
+#	Bind Service and then bind our custom Configuration - RABBITMQ
+	epinio service bind $(EPINIO_APP)_rabbitmq $(EPINIO_APP)
+	./formURI.sh $(EPINIO_APP)_rabbitmq 'rabbitmq.$(EPINIO_NS).svc.cluster.local:5672' 'amqp://user:%PASS%@%HOST%' > .tmp-uri
+	echo -n "epinio configuration create $(EPINIO_APP)-rabbitmq-cfg AMQP_URI " > .tmp-script
+	cat .tmp-uri >> .tmp-script
+	bash .tmp-script
+	epinio configuration bind $(EPINIO_APP)-rabbitmq-cfg $(EPINIO_APP)
+#	Bind Service and then bind our custom Configuration - REDIS
+	epinio service bind $(EPINIO_APP)_redis $(EPINIO_APP)
+	./formURI.sh $(EPINIO_APP)_redis 'redis-master.$(EPINIO_NS).svc.cluster.local:6379' 'redis://user:%PASS%@%HOST%/11' > .tmp-uri
+	echo -n "epinio configuration create $(EPINIO_APP)-redis-cfg REDIS_URI " > .tmp-script
+	cat .tmp-uri >> .tmp-script
+	bash .tmp-script
+	epinio configuration bind $(EPINIO_APP)-redis-cfg $(EPINIO_APP)
+#	Push the App, setting as environment variables the names of the Services and the Configurations
+	rm -f .tmp-script .tmp-uri
 	cat environment_dev.yml | grep -v '#dev' > environment.yml
-	epinio push
+	epinio push --name $(EPINIO_APP) \
+		--env POSTGRESQL_SVC=$(EPINIO_APP)_postgresql \
+		--env POSTGRESQL_CFG=$(EPINIO_APP)-postgresql-cfg \
+		--env RABBITMQ_SVC=$(EPINIO_APP)_rabbitmq \
+		--env RABBITMQ_CFG=$(EPINIO_APP)-rabbitmq-cfg \
+		--env REDIS_SVC=$(EPINIO_APP)_redis \
+		--env REDIS_CFG=$(EPINIO_APP)-redis-cfg
 	rm -f environment.yml
 	sleep 20
-	$(MAKE) epinio_bind
-
-epinio_bind:
-ifndef EPINIO_APP
-	$(error EPINIO_APP is undefined)
-endif
-#	Bind and config POSTGRESQL
-	epinio service bind $(EPINIO_APP)_postgresql $(EPINIO_APP)
-	sleep 15
-	epinio app manifest $(EPINIO_APP) .tmp-manifest
-	./formURI.sh .tmp-manifest $(EPINIO_APP)_postgresql postgresql 'postgresql.myns.svc.cluster.local:5432' 'postgresql://postgres:%PASS%@%HOST%/devex' > .tmp-uri
-	echo -n "epinio app env set $(EPINIO_APP) POSTGRES_URI " > .tmp-script
-	cat .tmp-uri >> .tmp-script
-	bash .tmp-script
-	sleep 10
-#	Bind and config RABBITMQ
-	epinio service bind $(EPINIO_APP)_rabbitmq $(EPINIO_APP)
-	sleep 15
-	epinio app manifest $(EPINIO_APP) .tmp-manifest
-	./formURI.sh .tmp-manifest $(EPINIO_APP)_rabbitmq rabbitmq 'rabbitmq.myns.svc.cluster.local:5672' 'amqp://user:%PASS%@%HOST%' > .tmp-uri
-	echo -n "epinio app env set $(EPINIO_APP) AMQP_URI " > .tmp-script
-	cat .tmp-uri >> .tmp-script
-	bash .tmp-script
-	sleep 10
-#	Bind and config REDIS
-	epinio service bind $(EPINIO_APP)_redis $(EPINIO_APP)
-	sleep 15
-	epinio app manifest $(EPINIO_APP) .tmp-manifest
-	./formURI.sh .tmp-manifest $(EPINIO_APP)_redis redis 'redis-master.myns.svc.cluster.local:6379' 'redis://user:%PASS%@%HOST%/11' > .tmp-uri
-	echo -n "epinio app env set $(EPINIO_APP) REDIS_URI " > .tmp-script
-	cat .tmp-uri >> .tmp-script
-	bash .tmp-script
-	sleep 10
-#	Scale up
-	rm -f .tmp-script .tmp-uri .tmp-manifest
-	epinio app update $(EPINIO_APP) --instances 1
 
 epinio_undeploy: epinio_target
 ifndef EPINIO_APP

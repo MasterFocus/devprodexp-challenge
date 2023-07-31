@@ -1,5 +1,0 @@
-name: myapp
-configuration:
-  instances: 0
-  environment:
-    APP_ENV: "HelloWorld"
