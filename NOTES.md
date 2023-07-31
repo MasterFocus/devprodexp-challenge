@@ -1,10 +1,10 @@
 This is my attempt to modify the code in order to deploy it to Epinio instead of CloudFoundry:
-- I originally thought I'd only have 2 days to complete the challenge (more on that later)
-- The "first part" of the challenge was all done with Epinio 1.8.1
+- The challenge was done at first with Epinio 1.8.1 and later with 1.9.0
 - I had never actually used `conda` before
 - I had never heard of `CloudFoundry`, `Epinio`, `nameko` nor `paketo`
 
-Machine used at first: `Linux 5.15.0-76-generic #83~20.04.1-Ubuntu SMP Wed Jun 21 20:23:31 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`
+Machine used at first:  
+`Linux 5.15.0-76-generic #83~20.04.1-Ubuntu SMP Wed Jun 21 20:23:31 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`
 
 After some time checking files, reading documentations and installing things, I was able to execute everything in `README-DevEnv.md`.
 - I already had [jq 1.6](https://jqlang.github.io/jq/) installed
@@ -109,17 +109,12 @@ rmyapp-94e7d341f71ff6f43253f1c5e813057b22f91cda amqp.exceptions.AccessRefused:
 ```
 
 <hr>
-<hr>
 
-When starting this challenge, I had around 48 hours left with the notebook I was using to do it.
-At this point, I wanted to deliver my partial results as I supposed my personal computer wouldn't handle a proper development environment.
+Note: at this point, I had to change my machine. Coincidentally, Epinio released version 1.9.0 during this gap.  
+These changes ended up **not** really affecting the outcome of the challenge.  
+Just for the sake of transparency, this is the machine used from this point onward:  
+`Linux 5.19.0-50-generic #50-Ubuntu SMP PREEMPT_DYNAMIC Mon Jul 10 18:24:29 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`
 
-Fortunately, I was given a chance to complete the challenge and my desktop - against all odds - didn't explode with a dual boot setup.
-Coincidentally, Epinio released version 1.9.0 during this gap. It didn't affect any of my prior steps.
-
-This is the machine used from this point onward: `Linux 5.19.0-50-generic #50-Ubuntu SMP PREEMPT_DYNAMIC Mon Jul 10 18:24:29 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`
-
-<hr>
 <hr>
 
 Continuing the challenge, after some retries and checking `epinio app logs`, I noticed two important mistakes when I defined the URIs:
