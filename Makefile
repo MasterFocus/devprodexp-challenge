@@ -136,8 +136,13 @@ undeployCF: cf_target
 	$(MAKE) cf_ds_rabbitmq
 	$(MAKE) cf_ds_redis
 
-# epinio
+# ================================================
+# Targets related to Epinio
+# ================================================
 
+# ------------------------------------------------
+# Select a namespace to work with
+# ------------------------------------------------
 epinio_target:
 ifndef EPINIO_NS
 	$(error EPINIO_NS is undefined)
@@ -145,46 +150,73 @@ endif
 	epinio namespace show $(EPINIO_NS) || epinio namespace create $(EPINIO_NS)
 	epinio target $(EPINIO_NS)
 
+# ------------------------------------------------
+# Create the Service - POSTGRESQL
+# ------------------------------------------------
 epinio_cs_postgres:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service create postgresql-dev $(EPINIO_APP)_postgresql
 
+# ------------------------------------------------
+# Destroy the Service - POSTGRESQL
+# ------------------------------------------------
 epinio_ds_postgres:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service delete $(EPINIO_APP)_postgresql --unbind
 
+# ------------------------------------------------
+# Create the Service - RABBITMQ
+# ------------------------------------------------
 epinio_cs_rabbitmq:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service create rabbitmq-dev $(EPINIO_APP)_rabbitmq
 
+# ------------------------------------------------
+# Destroy the Service - RABBITMQ
+# ------------------------------------------------
 epinio_ds_rabbitmq:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service delete $(EPINIO_APP)_rabbitmq --unbind
 
+# ------------------------------------------------
+# Create the Service - REDIS
+# ------------------------------------------------
 epinio_cs_redis:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service create redis-dev $(EPINIO_APP)_redis
 
+# ------------------------------------------------
+# Destroy the Service - REDIS
+# ------------------------------------------------
 epinio_ds_redis:
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
 endif
 	epinio service delete $(EPINIO_APP)_redis --unbind
 
+# ------------------------------------------------
+# Create all Services at once - POSTGRESQL RABBITMQ REDIS
+# ------------------------------------------------
 epinio_cs_all: epinio_cs_postgres epinio_cs_rabbitmq epinio_cs_redis
 
+# ------------------------------------------------
+# Destroy all Services at once - POSTGRESQL RABBITMQ REDIS
+# ------------------------------------------------
 epinio_ds_all: epinio_ds_postgres epinio_ds_rabbitmq epinio_ds_redis
 
+# ------------------------------------------------
+# Select the namespace, create all Services and deploy the App
+# ------------------------------------------------
 epinio_deploy: epinio_target epinio_cs_all
 #	Create the "empty" App
 	epinio app delete $(EPINIO_APP) || echo "App didn't exist - nothing to delete. Proceeding..."
@@ -223,6 +255,9 @@ epinio_deploy: epinio_target epinio_cs_all
 	rm -f environment.yml
 	sleep 20
 
+# ------------------------------------------------
+# Select the namespace, delete the App and destroy all Services
+# ------------------------------------------------
 epinio_undeploy: epinio_target
 ifndef EPINIO_APP
 	$(error EPINIO_APP is undefined)
@@ -230,6 +265,9 @@ endif
 	epinio app delete $(EPINIO_APP)
 	$(MAKE) epinio_ds_all
 
+# ------------------------------------------------
+# Purge the entire namespace
+# ------------------------------------------------
 epinio_purge:
 ifndef EPINIO_NS
 	$(error EPINIO_NS is undefined)
