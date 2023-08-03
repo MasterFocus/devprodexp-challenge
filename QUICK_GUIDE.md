@@ -4,6 +4,7 @@ To quickly grab a project like the original one (see branch "`master`") and make
 
 **Use branch "`challenge`" as reference for any files mentioned here that you may need to copy and/or modify:**
 - provide a **`Makefile`** that has all the relevant "`epinio_*`" targets
+- the executable script **`formURI.sh`** must also be present
 - the project must have a **`Procfile`** that calls the **`epinio_run.sh`** executable accordingly
 - file **`./test/nex-smoketest.sh`** must be executable and must be modified to use "`curl -k`" for its requests
 - for the next step, either be logged with Epinio CLI into an existing Epinio instance, or have `k3d` installed
