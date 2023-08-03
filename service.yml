@@ -1,0 +1,127 @@
+apiVersion: application.epinio.io/v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"application.epinio.io/v1","kind":"Service","metadata":{"annotations":{"meta.helm.sh/release-name":"epinio","meta.helm.sh/release-namespace":"epinio"},"creationTimestamp":"2023-07-22T23:33:27Z","generation":1,"labels":{"app.kubernetes.io/managed-by":"Helm"},"name":"postgresql-custom","namespace":"epinio","resourceVersion":"876","uid":"e9b7474c-6af5-47bb-954d-cdfd827fbad7"},"spec":{"appVersion":"15.1.0","chart":"postgresql","chartVersion":"12.1.6","description":"This service is going to deploy a simple default Bitnami PostreSQL db instance.\nYou can find more info at https://github.com/bitnami/charts/tree/master/bitnami/postgresql/.\nThis database is running inside the cluster so it's probably not a good choice for production\nenvironments, at least with this default configuration.\n","helmRepo":{"name":"bitnami","url":"https://charts.bitnami.com/bitnami"},"name":"postgresql-custom","serviceIcon":"https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png","shortDescription":"A PostgreSQL service that can be used during development","values":"serviceBindings: true\nextraDeploy:\n  - |\n    # Create a service account, role and binding to allow to list, get and\n    # delete PVCs. It should be used by the job below.\n\n    # To ensure the resources are deleted, use this annotation:\n    #\n    # annotations:\n    #  \"helm.sh/hook-delete-policy\": before-hook-creation,hook-succeeded\n\n    # https://helm.sh/docs/topics/charts_hooks/#hook-resources-are-not-managed-with-corresponding-releases\n    # https://helm.sh/docs/topics/charts_hooks/#hook-deletion-policies\n\n    ---\n    apiVersion: v1\n    kind: ServiceAccount\n    metadata:\n      name: \"pvc-deleter-{{ .Release.Name }}\"\n      namespace: {{ .Release.Namespace }}\n      annotations:\n        \"helm.sh/hook-delete-policy\": before-hook-creation,hook-succeeded\n        \"helm.sh/hook\": post-delete\n        \"helm.sh/hook-weight\": \"-6\"\n\n    ---\n    apiVersion: {{ include \"common.capabilities.rbac.apiVersion\" . }}\n    kind: Role\n    metadata:\n      name: \"pvc-deleter-{{ .Release.Name }}\"\n      namespace: {{ .Release.Namespace }}\n      annotations:\n        \"helm.sh/hook-delete-policy\": before-hook-creation,hook-succeeded\n        \"helm.sh/hook\": post-delete\n        \"helm.sh/hook-weight\": \"-6\"\n    rules:\n      - apiGroups:\n          - \"\"\n        resources:\n          - persistentvolumeclaims\n        verbs:\n          - get\n          - delete\n          - list\n\n    ---\n    kind: RoleBinding\n    apiVersion: {{ include \"common.capabilities.rbac.apiVersion\" . }}\n    metadata:\n      name: \"pvc-deleter-{{ .Release.Name }}\"\n      namespace: {{ .Release.Namespace }}\n      annotations:\n        \"helm.sh/hook-delete-policy\": before-hook-creation,hook-succeeded\n        \"helm.sh/hook\": post-delete\n        \"helm.sh/hook-weight\": \"-5\"\n    subjects:\n      - kind: ServiceAccount\n        name: \"pvc-deleter-{{ .Release.Name }}\"\n    roleRef:\n      apiGroup: rbac.authorization.k8s.io\n      kind: Role\n      name: \"pvc-deleter-{{ .Release.Name }}\"\n\n    ---\n    apiVersion: batch/v1\n    kind: Job\n    metadata:\n      name: \"pvc-deleter-{{ .Release.Name }}\"\n      labels:\n        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}\n        app.kubernetes.io/instance: {{ .Release.Name | quote }}\n        app.kubernetes.io/version: {{ .Chart.AppVersion }}\n        helm.sh/chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n      annotations:\n        # This is what defines this resource as a hook. Without this line, the\n        # job is considered part of the release.\n        \"helm.sh/hook\": post-delete\n        \"helm.sh/hook-weight\": \"-4\"\n        \"helm.sh/hook-delete-policy\": hook-succeeded\n    spec:\n      template:\n        metadata:\n          name: \"pvc-deleter-{{ .Release.Name }}\"\n          labels:\n            app.kubernetes.io/managed-by: {{ .Release.Service | quote }}\n            app.kubernetes.io/instance: {{ .Release.Name | quote }}\n            helm.sh/chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n        spec:\n          restartPolicy: Never\n          serviceAccountName: \"pvc-deleter-{{ .Release.Name }}\"\n          containers:\n          - name: post-install-job\n            image: \"rancher/kubectl:v1.22.6\"\n            command: [\"kubectl\", \"delete\", \"pvc\", \"-n\", \"{{ .Release.Namespace }}\", \"-l\", \"app.kubernetes.io/instance={{ .Release.Name }}\"]"}}
+    meta.helm.sh/release-name: epinio
+    meta.helm.sh/release-namespace: epinio
+    application.epinio.io/catalog-service-secret-types: Opaque,servicebinding.io/postgresql
+  creationTimestamp: "2023-07-23T21:33:41Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: postgresql-custom
+  namespace: epinio
+  resourceVersion: "41428"
+  uid: 80235084-3aa7-4428-8288-e5beb4b33f98
+spec:
+  appVersion: 15.1.0
+  chart: postgresql
+  chartVersion: 12.1.6
+  description: |
+    This service is going to deploy a simple default Bitnami PostreSQL db instance.
+    You can find more info at https://github.com/bitnami/charts/tree/master/bitnami/postgresql/.
+    This database is running inside the cluster so it's probably not a good choice for production
+    environments, at least with this default configuration.
+  helmRepo:
+    name: bitnami
+    url: https://charts.bitnami.com/bitnami
+  name: postgresql-custom
+  serviceIcon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+  shortDescription: A PostgreSQL service that can be used during development
+  values: |-
+    serviceBindings: true
+    extraDeploy:
+      - |
+        # Create a service account, role and binding to allow to list, get and
+        # delete PVCs. It should be used by the job below.
+
+        # To ensure the resources are deleted, use this annotation:
+        #
+        # annotations:
+        #  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+
+        # https://helm.sh/docs/topics/charts_hooks/#hook-resources-are-not-managed-with-corresponding-releases
+        # https://helm.sh/docs/topics/charts_hooks/#hook-deletion-policies
+
+        ---
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: "pvc-deleter-{{ .Release.Name }}"
+          namespace: {{ .Release.Namespace }}
+          annotations:
+            "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+            "helm.sh/hook": post-delete
+            "helm.sh/hook-weight": "-6"
+
+        ---
+        apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+        kind: Role
+        metadata:
+          name: "pvc-deleter-{{ .Release.Name }}"
+          namespace: {{ .Release.Namespace }}
+          annotations:
+            "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+            "helm.sh/hook": post-delete
+            "helm.sh/hook-weight": "-6"
+        rules:
+          - apiGroups:
+              - ""
+            resources:
+              - persistentvolumeclaims
+            verbs:
+              - get
+              - delete
+              - list
+
+        ---
+        kind: RoleBinding
+        apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+        metadata:
+          name: "pvc-deleter-{{ .Release.Name }}"
+          namespace: {{ .Release.Namespace }}
+          annotations:
+            "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+            "helm.sh/hook": post-delete
+            "helm.sh/hook-weight": "-5"
+        subjects:
+          - kind: ServiceAccount
+            name: "pvc-deleter-{{ .Release.Name }}"
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: Role
+          name: "pvc-deleter-{{ .Release.Name }}"
+
+        ---
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: "pvc-deleter-{{ .Release.Name }}"
+          labels:
+            app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+            app.kubernetes.io/instance: {{ .Release.Name | quote }}
+            app.kubernetes.io/version: {{ .Chart.AppVersion }}
+            helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+          annotations:
+            # This is what defines this resource as a hook. Without this line, the
+            # job is considered part of the release.
+            "helm.sh/hook": post-delete
+            "helm.sh/hook-weight": "-4"
+            "helm.sh/hook-delete-policy": hook-succeeded
+        spec:
+          template:
+            metadata:
+              name: "pvc-deleter-{{ .Release.Name }}"
+              labels:
+                app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+                app.kubernetes.io/instance: {{ .Release.Name | quote }}
+                helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+            spec:
+              restartPolicy: Never
+              serviceAccountName: "pvc-deleter-{{ .Release.Name }}"
+              containers:
+              - name: post-install-job
+                image: "rancher/kubectl:v1.22.6"
+                command: ["kubectl", "delete", "pvc", "-n", "{{ .Release.Namespace }}", "-l", "app.kubernetes.io/instance={{ .Release.Name }}"]
